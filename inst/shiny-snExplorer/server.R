@@ -12,6 +12,8 @@ shinyServer(function(input, output, session) {
     )
     if (input$input_format == "el") {
       column(12,
+             tags$b("DISCLAIMER:"), 
+             tags$p("This import functionality expects an edge list in which the first two columns represent the actors to be connected, each row defines one edge."),
              fileInput(
                inputId     = "in_edges",
                label       = tags$h4("Import an edge list"),
@@ -67,34 +69,26 @@ shinyServer(function(input, output, session) {
       need(input$example_data != "",
          "Please select example data.")
       )
-    # TODO Decide whether or not to read files from COREnets as RDS
     FILES$file_to_import <- paste0("example-data/", input$example_data, ".csv")
     FILES$type           <- "example"
-    # TODO Figure out how not to hardcode these
-    FILES$directed       <- case_when(
-      input$example_data %in% c("mambo", "juanes", "acero", "jake") ~ FALSE
-    )
+    FILES$directed       <- FALSE
   })
   
   # Get edges ==================================================================
   # The goal of this data ingestion pipeline is to take different types of
-  # network formats and return them as an edge list.
+  # network formats and return them as an edge list. This was kept as an 
+  # independant function for flexibility, but it can be removed.
   get_edges_table <- eventReactive(FILES$file_to_import, {
-    # TODO Change this to accomodate multiple types of files, like so:
-    # if (input$input_format == "el") {
-    #   read_csv(FILES$file_to_import)
-    # }
-    read_csv(FILES$file_to_import)
+    read_csv(FILES$file_to_import, na = "")
   })
   
   # Get graph  =================================================================
   # Since various reactive output rely on the graph, this function lists them
   # all and passes them in one consistent format.
   get_graph <- reactive({
-    el <- get_edges_table()
-    graph_from_data_frame(d = el,
-                               directed = FILES$directed
-                               ) %>%
+    graph_from_data_frame(d = get_edges_table(),
+                          directed = FILES$directed
+                          ) %>%
       # Calculate network level metrics ----------------------------------------
       set_graph_attr(name  = "density",
                      value = edge_density(.)

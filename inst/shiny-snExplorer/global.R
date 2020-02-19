@@ -7,15 +7,13 @@ suppressPackageStartupMessages({
   library(readr)
   library(igraph)
   library(shinyjs)
-  library(dplyr)
   library(rmarkdown)
   library(scales)
 })
 
 # Source files with additional functionalities =================================
 source("import_modal.R")
-source("export_modal.R")
-# source("get_edges_table.R")
+# source("export_modal.R")
 
 # Define the js method that resets the page ====================================
 jsResetCode <- "shinyjs.reset = function() {history.go(0)}"
