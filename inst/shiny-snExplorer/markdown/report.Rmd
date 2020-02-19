@@ -1,0 +1,220 @@
+---
+title: "<h2>Social Network Analysis Report</h2>"
+date: '`r Sys.Date()`'
+output: 
+  html_document:
+    theme: journal
+    toc: true
+    toc_float: true
+    toc_depth: 2
+params:
+  graph: NA
+  gname: NA
+  gdir:  NA
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(igraph)
+library(dplyr)
+library(knitr)
+```
+
+<br>
+
+## Sociogram
+
+<b> File name: </b> `r basename(params$gname)`.
+
+```{r, echo = FALSE}
+data.frame(Directed = params$gdir,
+           Nodes    = vcount(params$graph),
+           Edges    = ecount(params$graph)) %>%
+      DT::datatable(rownames = FALSE,
+                escape   = FALSE,
+                width    = "100%",
+                options  = list(
+                  dom          = "ti",
+                  scrollX      = TRUE,
+                  ordering     = FALSE,
+                  autoWidth    = FALSE,
+                  lengthChange = FALSE,
+                  searching    = FALSE,
+                  bInfo        = FALSE,
+                  bPaginate    = TRUE,
+                  bFilter      = FALSE
+                  )
+                )
+```
+
+
+```{r, echo=FALSE, message=FALSE, fig.align='center'}
+plot.igraph(params$graph,
+     vertex.color="lightblue",
+     vertex.label=NA,
+     edge.color="slategrey",
+     edge.arrow.size=0,
+     edge.curved=FALSE,
+     layout=layout_with_fr)
+```
+
+<br>
+
+## Global Network Metrics
+
+```{r, echo = FALSE}
+data.frame(Measure    = c("Density",
+                          "Local Clustering Coefficient",
+                          "Size",
+                          "Number of Edges"
+                          ),
+           Score      = c(
+             round(graph_attr(params$graph,
+                              name = "density"),
+                   digits = 3),
+             round(graph_attr(params$graph,
+                              name = "clustering"),
+                   digits = 3),
+             graph_attr(params$graph,
+                        name = "size"),
+             graph_attr(params$graph,
+                        name = "edges")
+             ),
+           Definition = c(
+             "Density is formally defined as the total number of observed ties in a network divided by the number of possible ties.",
+             "The sum of each actor's clustering coefficient divided by the number of actors within the network.",
+             "A count of the number of actors in a network.",
+             "The number of edges in the network."),
+           Caveat      = c(
+             "Can't be used to compare networks of different sizes.",
+             "",
+             "",
+             ""
+             ),
+           stringsAsFactors = FALSE
+    ) %>%
+      DT::datatable(rownames = FALSE,
+                escape   = FALSE,
+                width    = "100%",
+                options  = list(
+                  dom          = "ti",
+                  scrollX      = TRUE,
+                  ordering     = FALSE,
+                  autoWidth    = FALSE,
+                  lengthChange = FALSE,
+                  searching    = FALSE,
+                  bInfo        = FALSE,
+                  bPaginate    = TRUE,
+                  bFilter      = FALSE
+                  )
+                )
+```
+
+<br>
+
+## Cohesive Subgroups
+
+```{r, echo = FALSE}
+data.frame(Measure = c("Weak Components",
+                       "Number of Cliques",
+                       "Max K-Core"),
+           Score = c(graph_attr(params$graph,
+                                "components"),
+                     graph_attr(params$graph,
+                                "cliques"),
+                     graph_attr(params$graph,
+                                "kcore")),
+           Definition = c("Subgroups of actors who can reach each other directly.",
+                          "Maximal number of subsets of three or more where each actor is directly connected to all others.",
+                          "A maximal group of actors, all of whom are connected to some number (k) of other group members."),
+           Caveat = c("",
+                      "",
+                      ""),
+               stringsAsFactors = FALSE
+    ) %>%
+      DT::datatable(rownames = FALSE,
+                escape   = FALSE,
+                width    = "100%",
+                options  = list(
+                  dom          = "ti",
+                  scrollX      = TRUE,
+                  ordering     = FALSE,
+                  pageLength   = 3,
+                  autoWidth    = FALSE,
+                  lengthChange = FALSE,
+                  searching    = FALSE,
+                  bInfo        = FALSE,
+                  bPaginate    = TRUE,
+                  bFilter      = FALSE
+                ))
+```
+
+<br>
+
+## Vertex Level Metrics
+
+```{r, echo = FALSE}
+if (params$gdir == TRUE) {
+  data.frame(ID             = vertex_attr(params$graph,
+                                          "name"),
+             `In Degree`    = vertex_attr(params$graph,
+                                           "in_degree"),
+             `Out Degree`   = vertex_attr(params$graph,
+                                          "out_degree"),
+             `Total Degree` = vertex_attr(params$graph,
+                                           "total_degree"),
+             Betweenness    = vertex_attr(params$graph,
+                                              "betweenness"),
+             Eigenvector    = vertex_attr(params$graph,
+                                              "eigenvector"),
+             `Inverse Constraint` = vertex_attr(params$graph,
+                                                    "constraint"),
+             stringsAsFactors = FALSE
+             ) %>%
+    DT::datatable(rownames = FALSE,
+                  escape   = FALSE,
+                  width    = "100%",
+                  options  = list(
+                    dom          = "tilfpr",
+                    scrollX      = TRUE,
+                    ordering     = TRUE,
+                    pageLength   = 10,
+                    autoWidth    = FALSE,
+                    lengthChange = FALSE,
+                    searching    = FALSE,
+                    bInfo        = TRUE,
+                    bPaginate    = TRUE,
+                    bFilter      = FALSE
+                    )
+    )
+  }
+data.frame(ID             = vertex_attr(params$graph,
+                                        "name"),
+           `Total Degree` = vertex_attr(params$graph,
+                                        "total_degree"),
+           Betweenness    = vertex_attr(params$graph,
+                                        "betweenness"),
+           Eigenvector    = vertex_attr(params$graph,
+                                        "eigenvector"),
+           `Inverse Constraint` = vertex_attr(params$graph,
+                                              "constraint"),
+           stringsAsFactors = FALSE
+           ) %>%
+  DT::datatable(rownames = FALSE,
+                escape   = FALSE,
+                width    = "100%",
+                options  = list(
+                  dom          = "tilfpr",
+                  scrollX      = TRUE,
+                  ordering     = TRUE,
+                  pageLength   = 10,
+                  autoWidth    = FALSE,
+                  lengthChange = FALSE,
+                  searching    = FALSE,
+                  bInfo        = TRUE,
+                  bPaginate    = TRUE,
+                  bFilter      = FALSE
+                  )
+                ) 
+```
+
