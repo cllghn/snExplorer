@@ -195,9 +195,17 @@ shinyServer(function(input, output, session) {
   
   # Network Visualization ======================================================
   output$network_visualization <- renderVisNetwork({
-    
+
     visIgraph(get_graph()) %>%
       visIgraphLayout(layout = input$graph_layout) %>%
+      visNodes(color = list(
+        background = "lightblue",
+        border     = "slategrey",
+        highlight  = list(
+          background = "orange",
+          border     = "darkred"
+        )
+      )) %>%
       visOptions(highlightNearest = TRUE,
                  nodesIdSelection=TRUE) %>%
       visInteraction(navigationButtons = TRUE,
@@ -432,7 +440,7 @@ shinyServer(function(input, output, session) {
            "The input is NULL or blank"
       )
     ),
-    filename = paste0(input$report_name, ".html"),
+    filename = function() paste0(input$report_name, ".html"),
     content  = function(file) {
       report <- file.path(tempdir(), 'report.Rmd')
       file.copy('markdown/report.Rmd', report, overwrite = TRUE)

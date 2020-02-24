@@ -9,8 +9,25 @@ Lab](https://my.nps.edu/web/core) and hosted on
 ## Bugs and Suggestions
 
 If you encounter an obvious bug for which tere is not already an active
-[issue](), please [create a new issue]() (preferably a reproducible
-example) on Github.
+[issue](https://github.com/cjcallag/snExplorer/issues), please [create a
+new issue](https://guides.github.com/features/issues/) (preferably a
+reproducible example) on Github.
+
+## Citations
+
+The Cocaine Smuggling network data (e.g., Operacion Acero, Operacion
+Jake, Operacion Juanes, and Operacion Mambo) should be cited as:
+
+``` r
+@inproceedings{
+  author    = {Jimenez-Salinas Framis, Andrea},
+  title     = {Illegal networks or criminal organizations: Power, roles and facilitators in four cocaine trafficking structures.},
+  maintitle = {Annual Illicit Networks Workshop},
+  venue     = {Montreal},
+  year      = {2011},
+  url       = {https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/cocainesmuggling}
+}
+```
 
 <br>
 

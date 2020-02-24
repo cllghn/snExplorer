@@ -1,5 +1,5 @@
 ---
-title: "<h2>Social Network Analysis Report</h2>"
+title: "Social Network Analysis Report"
 date: '`r Sys.Date()`'
 output: 
   html_document:
@@ -18,6 +18,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(igraph)
 library(dplyr)
 library(knitr)
+library(visNetwork)
 ```
 
 <br>
@@ -49,13 +50,28 @@ data.frame(Directed = params$gdir,
 
 
 ```{r, echo=FALSE, message=FALSE, fig.align='center'}
-plot.igraph(params$graph,
-     vertex.color="lightblue",
-     vertex.label=NA,
-     edge.color="slategrey",
-     edge.arrow.size=0,
-     edge.curved=FALSE,
-     layout=layout_with_fr)
+if ("color" %in% edge_attr_names(params$graph)) {
+  edge_color <- edge_attr(params$graph, "color")
+} else {
+  edge_color <- "slategrey"
+}
+
+params$graph %>%
+  visIgraph() %>%
+  visNodes(size = 10, color = list(
+    background = "lightblue",
+    border     = edge_color,
+    highlight  = list(
+      background = "orange",
+      border     = "darkred"
+    )
+  )) %>%
+  visEdges(color = edge_color) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection =list(
+    enabled = TRUE,
+    style   = 'width: 200px; height: 26px; border:none; outline:none;')) %>%
+  visInteraction(navigationButtons = TRUE
+  )
 ```
 
 <br>
@@ -64,7 +80,7 @@ plot.igraph(params$graph,
 
 ```{r, echo = FALSE}
 data.frame(Measure    = c("Density",
-                          "Local Clustering Coefficient",
+                          "Global Clustering Coefficient",
                           "Size",
                           "Number of Edges"
                           ),
@@ -81,14 +97,14 @@ data.frame(Measure    = c("Density",
                         name = "edges")
              ),
            Definition = c(
-             "Density is formally defined as the total number of observed ties in a network divided by the number of possible ties.",
+             "Density is formally defined as the total number of observed ties in a network divided by the total possible number of ties in that network. The output ranges from 0 to 1.",
              "The sum of each actor's clustering coefficient divided by the number of actors within the network.",
              "A count of the number of actors in a network.",
-             "The number of edges in the network."),
+             "A count of the number of edges in the network."),
            Caveat      = c(
-             "Can't be used to compare networks of different sizes.",
+             "It should not be used to compare networks of different sizes.",
              "",
-             "",
+             "Metric outputs are dependent upon network size. Also, the manner in which an analyst sets an examination's boundaries may not reflect the actual size of a network.",
              ""
              ),
            stringsAsFactors = FALSE
@@ -124,12 +140,12 @@ data.frame(Measure = c("Weak Components",
                                 "cliques"),
                      graph_attr(params$graph,
                                 "kcore")),
-           Definition = c("Subgroups of actors who can reach each other directly.",
+           Definition = c("Subgroups of actors who can reach each other directly or indirectly.",
                           "Maximal number of subsets of three or more where each actor is directly connected to all others.",
                           "A maximal group of actors, all of whom are connected to some number (k) of other group members."),
-           Caveat = c("",
-                      "",
-                      ""),
+           Caveat = c("Applies to both undirected and directed data. Often not very useful in a well-connected network.",
+                      "Actors can belong to more than one clique, which can often makes identifying distinct subgroups impossible (i.e., where each actor is assigned to one and only one subgroup). Several alternative clique algorithms exist to ease the restrictions that each actor is directly connected to one another.",
+                      "Actors of the same core do not necessarily have to be connected to one another."),
                stringsAsFactors = FALSE
     ) %>%
       DT::datatable(rownames = FALSE,
