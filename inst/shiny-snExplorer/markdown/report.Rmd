@@ -16,8 +16,6 @@ params:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(igraph)
-library(dplyr)
-library(knitr)
 library(visNetwork)
 ```
 

@@ -1,0 +1,31 @@
+---
+title: "snExplorer"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+**{snExplorer}** is a parsimonious Shiny application for interactive visualization and analysis of networks.
+
+
+## Installation
+
+**{snExplorer}**  is an R package and can be installed using **{devtools}** :
+
+```{r, eval = FALSE}
+devtools::install_github("cjcallag/snExplorer",
+                         force = TRUE)
+```
+
+
+## Lauching App 
+
+```{r, eval = FALSE}
+snExplorer::launch_shiny_app()
+```
+
+```{r, echo = FALSE}
+knitr::include_graphics(path = "inst/img/landing.png")
+```

@@ -2,7 +2,6 @@
 suppressPackageStartupMessages({
   library(shiny)
   library(shinydashboard)
-  library(shinyWidgets)
   library(visNetwork)
   library(readr)
   library(igraph)
