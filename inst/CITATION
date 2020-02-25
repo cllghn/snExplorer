@@ -1,0 +1,16 @@
+citHeader("To cite snExplorer use:")
+
+citEntry(
+  entry        = "Manual",
+  title        = "snExplorer: A parsimonious Shiny application for interactive visualization and analysis of networks.",
+  author       = c(as.person("Christopher Callaghan"), as.person("Brendan Knapp")),
+  year         = "2020",
+  note         = "R package version 0.0.0.9000",
+  url          = "https://github.com/cjcallag/snExplorer",
+  key          = "snExplorer-package",
+  textVersion  = paste(
+    "Callaghan C. J. and Knapp, B. G. (2020). snExplorer: A parsimonious Shiny application for interactive visualization and analysis of networks.",
+    "R package version 0.0.0.9000",
+    "Retrieved from https://github.com/cjcallag/snExplorer"
+  )
+)

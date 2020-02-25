@@ -5,6 +5,15 @@
 #'
 #' @importFrom shiny runApp
 #'
+#' @examples 
+#' \dontrun{
+#' 
+#' 
+#' launch_shiny_app()
+#' 
+#' 
+#' }
+#'
 #' @export
 launch_shiny_app <- function(app = "shiny-snExplorer",
                              use_browser = TRUE) {

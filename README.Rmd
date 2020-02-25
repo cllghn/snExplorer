@@ -1,11 +1,37 @@
 ---
-title: "snExplorer"
-output: github_document
+title: "`{snExplorer}`"
+output:
+  github_document:
+    html_preview: true
+    toc: true
+    toc_depth: 2
+editor_options: 
+  chunk_output_type: console
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+
+options(width = 150)
 ```
+
+
+<!-- badges: start -->
+[![R build status](https://github.com/cjcallag/snExplorer/workflows/R-CMD-check/badge.svg)](https://github.com/cjcallag/snExplorer/actions?workflow=R-CMD-check)
+[![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/cjcallag/snExplorer?branch=master&svg=true)](https://ci.appveyor.com/project/cjcallag/snExplorer)
+[![Travis-CI Build Status](https://travis-ci.org/cjcallag/snExplorer.svg?branch=master)](https://travis-ci.org/cjcallag/snExplorer)
+[![Depends](https://img.shields.io/badge/Depends-GNU_R>=3.5-blue.svg)](https://www.r-project.org/)
+[![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/cjcallag/snExplorer.svg)](https://github.com/cjcallag/snExplorer)
+[![HitCount](http://hits.dwyl.io/cjcallag/snExplorer.svg)](http://hits.dwyl.io/cjcallag/snExplorer)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.mit.edu/~amini/LICENSE.md)
+<!-- badges: end -->
 
 **{snExplorer}** is a parsimonious Shiny application for interactive visualization and analysis of networks.
 
@@ -15,8 +41,7 @@ knitr::opts_chunk$set(echo = TRUE)
 **{snExplorer}**  is an R package and can be installed using **{devtools}** :
 
 ```{r, eval = FALSE}
-devtools::install_github("cjcallag/snExplorer",
-                         force = TRUE)
+devtools::install_github("cjcallag/snExplorer")
 ```
 
 
@@ -27,5 +52,5 @@ snExplorer::launch_shiny_app()
 ```
 
 ```{r, echo = FALSE}
-knitr::include_graphics(path = "inst/img/landing.png")
+knitr::include_graphics(path = "man/figures/landing.png")
 ```

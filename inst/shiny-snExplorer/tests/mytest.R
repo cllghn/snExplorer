@@ -1,0 +1,12 @@
+app <- ShinyDriver$new("../", seed = 831)
+app$snapshotInit("mytest")
+
+app$snapshot()
+app$setInputs(example_data = "acero")
+app$setInputs(graph_layout = "layout_in_circle")
+app$snapshot()
+app$setInputs(sidebarCollapsed = FALSE)
+app$setInputs(tabs = "measures")
+app$snapshot()
+app$setInputs(tabs = "about")
+app$snapshot()
