@@ -23,6 +23,7 @@ options(width = 150)
 ```
 
 
+
 <!-- badges: start -->
 [![R build status](https://github.com/cjcallag/snExplorer/workflows/R-CMD-check/badge.svg)](https://github.com/cjcallag/snExplorer/actions?workflow=R-CMD-check)
 [![AppVeyor build status](https://ci.appveyor.com/api/projects/status/github/cjcallag/snExplorer?branch=master&svg=true)](https://ci.appveyor.com/project/cjcallag/snExplorer)
