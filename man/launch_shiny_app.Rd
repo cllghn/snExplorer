@@ -14,3 +14,13 @@ launch_shiny_app(app = "shiny-snExplorer", use_browser = TRUE)
 \description{
 Application Launcher
 }
+\examples{
+\dontrun{
+
+
+launch_shiny_app()
+
+
+}
+
+}

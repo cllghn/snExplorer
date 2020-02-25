@@ -1,5 +1,26 @@
-snExplorer
+`{snExplorer}`
 ================
+
+  - [Installation](#installation)
+  - [Lauching App](#lauching-app)
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+<!-- badges: start -->
+
+[![R build
+status](https://github.com/cjcallag/snExplorer/workflows/R-CMD-check/badge.svg)](https://github.com/cjcallag/snExplorer/actions?workflow=R-CMD-check)
+[![AppVeyor build
+status](https://ci.appveyor.com/api/projects/status/github/cjcallag/snExplorer?branch=master&svg=true)](https://ci.appveyor.com/project/cjcallag/snExplorer)
+[![Travis-CI Build
+Status](https://travis-ci.org/cjcallag/snExplorer.svg?branch=master)](https://travis-ci.org/cjcallag/snExplorer)
+[![Depends](https://img.shields.io/badge/Depends-GNU_R%3E=3.5-blue.svg)](https://www.r-project.org/)
+[![GitHub code size in
+bytes](https://img.shields.io/github/languages/code-size/cjcallag/snExplorer.svg)](https://github.com/cjcallag/snExplorer)
+[![HitCount](http://hits.dwyl.io/cjcallag/snExplorer.svg)](http://hits.dwyl.io/cjcallag/snExplorer)
+[![License:
+MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://www.mit.edu/~amini/LICENSE.md)
+<!-- badges: end -->
 
 **{snExplorer}** is a parsimonious Shiny application for interactive
 visualization and analysis of networks.
@@ -10,8 +31,9 @@ visualization and analysis of networks.
 **{devtools}** :
 
 ``` r
-devtools::install_github("cjcallag/snExplorer",
-                         force = TRUE)
+if (!requireNamespace("remotes")) install.packages("remotes")
+
+remotes::install_github("cjcallag/snExplorer")
 ```
 
 ## Lauching App
@@ -20,4 +42,4 @@ devtools::install_github("cjcallag/snExplorer",
 snExplorer::launch_shiny_app()
 ```
 
-<img src="inst/img/landing.png" width="1137" />
+<img src="man/figures/landing.png" width="100%" />

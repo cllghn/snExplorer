@@ -58,10 +58,7 @@ shinyServer(function(input, output, session) {
     )
     FILES$file_to_import <- input$in_edges$datapath
     FILES$type           <- input$input_format
-    FILES$directed       <- ifelse(
-      input$input_directed_undirected == "Directed",
-      TRUE,
-      FALSE)
+    FILES$directed       <- input$input_directed_undirected == "Directed"
   })
   
   observeEvent(input$example_data, {
@@ -86,68 +83,51 @@ shinyServer(function(input, output, session) {
   # Since various reactive output rely on the graph, this function lists them
   # all and passes them in one consistent format.
   get_graph <- reactive({
-    graph_from_data_frame(d = get_edges_table(),
-                          directed = FILES$directed
-                          ) %>%
-      # Calculate network level metrics ----------------------------------------
-      set_graph_attr(name  = "density",
-                     value = edge_density(.)
-                     ) %>%
-      set_graph_attr(name  = "clustering",
-                     value = transitivity(., type = "average")
-                     ) %>%
-      set_graph_attr(name  = "size",
-                     value = vcount(.)
-                     ) %>%
-      set_graph_attr(name  = "edges",
-                     value = ecount(.)
-                     ) %>%
-      # Calculate basic subgrouping metrics ------------------------------------
-      set_graph_attr(name  = "components",
-                     value = components(.,
-                                        mode = "weak")$no
-                     ) %>%
-      set_graph_attr(name  = "cliques",
-                     value = length(igraph::cliques(.,
-                                                    min = 3))
-                     ) %>%
-      set_graph_attr(name  = "kcore",
-                     value = max(coreness(.))
-                     ) %>%
-      # Calculate vertex level metrics -----------------------------------------
-      set_vertex_attr(name = "total_degree",
-                      value = degree(., mode = "total")
-                      ) %>%
-      set_vertex_attr(name = "in_degree",
-                      value = degree(., mode = "in")
-                      ) %>%
-      set_vertex_attr(name = "out_degree",
-                      value = degree(., mode = "out")
-                      ) %>%
-      set_vertex_attr(name = "betweenness",
-                      value = round(betweenness(.,
-                                                directed   = FILES$directed,
-                                                normalized = TRUE,
-                                                weights    = NULL),
-                                    digits = 3)
-                      ) %>%
-      set_vertex_attr(name = "eigenvector",
-                      value = round(eigen_centrality(.,
-                                                     directed = FILES$directed,
-                                                     weights = NULL
-                                                     )$vector,
-                                    digits = 3)
-                      ) %>%
-      set_vertex_attr(name = "constraint",
-                      value = round(1.125 - constraint(.),
-                                    digits = 3)
-                      ) %>%
-      # Set vertex attributes --------------------------------------------------
-      set_vertex_attr(name = "size",
-                      value = 25
-                      ) %>%
-      set_vertex_attr(name  = "id",
-                      value = vertex_attr(., name = "name"))
+    
+    out <- graph_from_data_frame(d = get_edges_table(), 
+                                 directed = FILES$directed)
+
+    # Set network level attributes -----------------------------------------
+    graph_attr(out) <- c(
+      graph_attr(out) %{}% NULL,
+      #* Calculate topological metrics -------------------------------------
+      list(
+        density = edge_density(out),
+        clustering = transitivity(out, type = "average"),
+        size = vcount(out),
+        edges = ecount(out),
+        #* Calculate basic subgrouping metrics ------------------------------
+        components = components(out, mode = "weak")$no,
+        cliques = length(igraph::cliques(out, min = 3)),
+        kcore = max(coreness(out))
+      )
+    )
+    # Set vertex attributes --------------------------------------------------
+    vertex_attr(out) <- c(
+      vertex_attr(out) %{}% NULL,
+      list(
+        #* Metrics -------------------------------------------------------------
+        total_degree = degree(out, mode = "total"),
+        in_degree = degree(out, mode = "in"),
+        out_degree = degree(out, mode = "out"),
+        betweenness = round(
+          betweenness(out, directed = is_directed(out), 
+                      normalized = TRUE, weights = NULL),
+          digits = 3
+        ),
+        eigenvector = round(
+          eigen_centrality(out, directed = is_directed(out), weights = NULL)$vector,
+          digits = 3
+        ),
+        constraint = round(1.125 - constraint(out), digits = 3),
+        #* Other ---------------------------------------------------------------
+        size = rep(25, length = vcount(out)),
+        id = vertex_attr(out, "name") %||% seq_along(V(out))
+      )
+    )
+    
+    out
+    
   })
   
   # Context information ========================================================
@@ -169,9 +149,7 @@ shinyServer(function(input, output, session) {
   
   output$context_box_graph <- renderInfoBox({
     infoBox(title = tags$h4("Graph"),
-            value = ifelse(is_directed(get_graph()),
-                           "directed",
-                           "undirected"),
+            value = if (is_directed(get_graph())) "directed" else "undirected",
             icon  = icon("bezier-curve"),
             fill  = TRUE
     )
@@ -298,25 +276,20 @@ shinyServer(function(input, output, session) {
   # Generate network measures ==================================================
   ## Network level metrics -----------------------------------------------------
   output$metrics_topography <- DT::renderDataTable({
-    data.frame(Variable                   = c("Density",
-                                              "Local Clustering Coefficient",
-                                              "Size",
-                                              "Number of Edges"),
-               Score                      = c(round(graph_attr(get_graph(),
-                                                               name = "density"),
-                                                    digits = 3),
-                                              round(graph_attr(get_graph(),
-                                                               name = "clustering"),
-                                                    digits = 3),
-                                              graph_attr(get_graph(),
-                                                         name = "size"),
-                                              graph_attr(get_graph(),
-                                                         name = "edges")),
-               Explanation                = c("Density is formally defined as the total number of observed ties in a network divided by the number of possible ties.",
-                                              "The sum of each actor's clustering coefficient divided by the number of actors within the network.",
-                                              "A count of the number of actors in a network.",
-                                              "The number of edges in the network."),
-               stringsAsFactors = FALSE
+    data.frame(
+      Variable = c("Density",
+                   "Local Clustering Coefficient",
+                   "Size",
+                   "Number of Edges"),
+      Score = c(round(graph_attr(get_graph(), name = "density"), digits = 3),
+                round(graph_attr(get_graph(), name = "clustering"), digits = 3),
+                graph_attr(get_graph(), name = "size"),
+                graph_attr(get_graph(), name = "edges")),
+      Explanation = c("Density is formally defined as the total number of observed ties in a network divided by the number of possible ties.",
+                      "The sum of each actor's clustering coefficient divided by the number of actors within the network.",
+                      "A count of the number of actors in a network.",
+                      "The number of edges in the network."),
+      stringsAsFactors = FALSE
     ) %>%
       DT::datatable(rownames = FALSE,
                 escape   = FALSE,
@@ -338,19 +311,15 @@ shinyServer(function(input, output, session) {
   
   ## Group level metrics -------------------------------------------------------
   output$metrics_subgroup <- DT::renderDataTable({
-    data.frame(Variable                   = c("Weak Components",
-                                              "Number of Cliques",
-                                              "Max K-Core"),
-               Score                      = c(graph_attr(get_graph(),
-                                                         "components"),
-                                              graph_attr(get_graph(),
-                                                         "cliques"),
-                                              graph_attr(get_graph(),
-                                                         "kcore")),
-               Explanation                = c("Subgroups of actors who can reach each other directly.",
-                                              "Maximal number of subsets of three or more where each actor is directly connected to all others.",
-                                              "A maximal group of actors, all of whom are connected to some number (k) of other group members."),
-               stringsAsFactors = FALSE
+    data.frame(
+      Variable = c("Weak Components", "Number of Cliques", "Max K-Core"),
+      Score = c(graph_attr(get_graph(), "components"), 
+                graph_attr(get_graph(), "cliques"),
+                graph_attr(get_graph(), "kcore")),
+      Explanation = c("Subgroups of actors who can reach each other directly.",
+                      "Maximal number of subsets of three or more where each actor is directly connected to all others.",
+                      "A maximal group of actors, all of whom are connected to some number (k) of other group members."),
+      stringsAsFactors = FALSE
     ) %>%
       DT::datatable(rownames = FALSE,
                 escape   = FALSE,
@@ -372,21 +341,15 @@ shinyServer(function(input, output, session) {
   ## Vertex level metrics ------------------------------------------------------
   output$metrics_vertex <- DT::renderDataTable({
     if (FILES$directed == TRUE) {
-      data.frame(ID             = vertex_attr(get_graph(),
-                                           "name"),
-                 `In Degree`    = vertex_attr(get_graph(),
-                                           "in_degree"),
-                 `Out Degree`   = vertex_attr(get_graph(),
-                                           "out_degree"),
-                 `Total Degree` = vertex_attr(get_graph(),
-                                           "total_degree"),
-                 Betweenness    = vertex_attr(get_graph(),
-                                              "betweenness"),
-                 Eigenvector    = vertex_attr(get_graph(),
-                                              "eigenvector"),
-                 `Inverse Constraint` = vertex_attr(get_graph(),
-                                                    "constraint"),
-                 stringsAsFactors = FALSE
+      data.frame(
+        ID = vertex_attr(get_graph(), "name"),
+        `In Degree` = vertex_attr(get_graph(), "in_degree"),
+        `Out Degree` = vertex_attr(get_graph(), "out_degree"),
+        `Total Degree` = vertex_attr(get_graph(), "total_degree"),
+        Betweenness    = vertex_attr(get_graph(), "betweenness"),
+        Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
+        `Inverse Constraint` = vertex_attr(get_graph(), "constraint"),
+        stringsAsFactors = FALSE
       ) %>%
         DT::datatable(rownames = FALSE,
                       escape   = FALSE,
@@ -404,15 +367,12 @@ shinyServer(function(input, output, session) {
                         bFilter      = FALSE
                         ))
     }
-    data.frame(ID             = vertex_attr(get_graph(),
-                                           "name"),
-               `Total Degree` = vertex_attr(get_graph(),
-                                           "total_degree"),
-               Betweenness    = vertex_attr(get_graph(),
-                                            "betweenness"),
-               Eigenvector    = vertex_attr(get_graph(),
-                                            "eigenvector"),
-               `Inverse Constraint` = vertex_attr(get_graph(),
+    data.frame(
+      ID = vertex_attr(get_graph(), "name"),
+      `Total Degree` = vertex_attr(get_graph(), "total_degree"),
+      Betweenness    = vertex_attr(get_graph(), "betweenness"),
+      Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
+      `Inverse Constraint` = vertex_attr(get_graph(),
                                                   "constraint"),
                stringsAsFactors = FALSE
     ) %>%

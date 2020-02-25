@@ -1,0 +1,7 @@
+destination: docs
+
+url: https://cjcallag.github.io/snExplorer
+
+template:
+  params:
+    bootswatch: cerulean
