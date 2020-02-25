@@ -41,7 +41,9 @@ options(width = 150)
 **{snExplorer}**  is an R package and can be installed using **{devtools}** :
 
 ```{r, eval = FALSE}
-devtools::install_github("cjcallag/snExplorer")
+if (!requireNamespace("remotes")) install.packages("remotes")
+
+remotes::install_github("cjcallag/snExplorer")
 ```
 
 

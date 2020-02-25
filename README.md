@@ -31,7 +31,9 @@ visualization and analysis of networks.
 **{devtools}** :
 
 ``` r
-devtools::install_github("cjcallag/snExplorer")
+if (!requireNamespace("remotes")) install.packages("remotes")
+
+remotes::install_github("cjcallag/snExplorer")
 ```
 
 ## Lauching App
