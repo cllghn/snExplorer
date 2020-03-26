@@ -8,5 +8,4 @@ app$snapshot()
 app$setInputs(sidebarCollapsed = FALSE)
 app$setInputs(tabs = "measures")
 app$snapshot()
-app$setInputs(tabs = "about")
-app$snapshot()
+
