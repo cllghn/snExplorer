@@ -1,13 +1,14 @@
 # Load up all required packages ================================================
 suppressPackageStartupMessages({
-  library(shiny)
-  library(shinydashboard)
-  library(visNetwork)
-  library(readr)
-  library(igraph)
-  library(shinyjs)
-  library(rmarkdown)
-  library(scales)
+    library(V8)
+    library(shiny)
+    library(shinydashboard)
+    library(visNetwork)
+    library(readr)
+    library(igraph)
+    library(shinyjs)
+    library(rmarkdown)
+    library(scales)
 })
 
 # Source files with additional functionalities =================================

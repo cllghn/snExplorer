@@ -9,10 +9,18 @@ modal_import_data <- function() {
           label   = tags$h4("Use example data"),
           choices = list(
             "",
-            "Operation Acero"  = "acero",
-            "Operation Jake"   = "jake",
-            "Operation Juanes" = "juanes",
-            "Operation Mambo"  = "mambo"
+            "Australian Embassy Bombing (2004)" = "australian_embassy_bombing_2004",
+            "Bali Bombing (2005)"               = "bali_bombings_2005",
+            "Ciel"                              = "ciel",
+            "Drugnet"                           = "drugnet",
+            "Koschade"                          = "Koschade",
+            "London Gang"                       = "london_gang",
+            "Noordin Operations"                = "noordin_operational",
+            "Operation Acero"                   = "acero",
+            "Operation Jake"                    = "jake",
+            "Operation Juanes"                  = "juanes",
+            "Operation Mambo"                   = "mambo",
+            "Siren"                             = "siren"
             ),
           width   = "100%" 
         ),

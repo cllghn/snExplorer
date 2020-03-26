@@ -6,6 +6,14 @@ relational data. The code is mainatined by the [CORE
 Lab](https://my.nps.edu/web/core) and hosted on
 [Github](https://github.com/NPSCORELAB).
 
+<br>
+
+<center>
+
+<img src = "corelogo.png">
+
+</center>
+
 ## Bugs and Suggestions
 
 If you encounter an obvious bug for which tere is not already an active
@@ -13,26 +21,22 @@ If you encounter an obvious bug for which tere is not already an active
 new issue](https://guides.github.com/features/issues/) (preferably a
 reproducible example) on Github.
 
-## Citations
+## Sponsorship
 
-The Cocaine Smuggling network data (e.g., Operacion Acero, Operacion
-Jake, Operacion Juanes, and Operacion Mambo) should be cited as:
-
-``` r
-@inproceedings{
-  author    = {Jimenez-Salinas Framis, Andrea},
-  title     = {Illegal networks or criminal organizations: Power, roles and facilitators in four cocaine trafficking structures.},
-  maintitle = {Annual Illicit Networks Workshop},
-  venue     = {Montreal},
-  year      = {2011},
-  url       = {https://sites.google.com/site/ucinetsoftware/datasets/covert-networks/cocainesmuggling}
-}
-```
+The Regional Defense Combating Terrorism and Irregular Warfare
+Fellowship Program (CTIWFP) has funded, sponsored, and otherwise enabled
+this event. CTIWFP was established to meet an emerging and urgent
+defense requirement to build partnerships through targeted, non-lethal,
+combating terrorism (CbT) education and training. CTIWFP directly
+supports DOD and national goals by providing CbT education and training
+for mid/senior-level international military officers, ministry of
+defense civilians, and security officials whose current or future
+responsibilities involve combating terrorism.
 
 <br>
 
 <center>
 
-<img src = "corelogo.png">
+<img src = "CTIWFP.png">
 
 </center>
