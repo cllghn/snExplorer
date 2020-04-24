@@ -2,6 +2,58 @@ shinyServer(function(input, output, session) {
   # Launch the data import modal ===============================================
   modal_import_data()
   
+  ## Reactive UI for import start point (e.g., internal vs. external) ----------
+  output$data_importation <- renderUI({
+      validate(
+          need(
+              input$input_type != "",
+              "Please select a valid staring point."
+          )
+      )
+      if (input$input_type == "internal_data") {
+          column(
+              width = 12,
+              selectInput(
+                  inputId = "example_data",
+                  label   = tags$h4("Use example data"),
+                  choices = list(
+                      "",
+                      "Australian Embassy Bombing (2004)" = "australian_embassy_bombing_2004",
+                      "Bali Bombing (2005)"               = "bali_bombings_2005",
+                      "Ciel"                              = "ciel",
+                      "Drugnet"                           = "drugnet",
+                      "Koschade"                          = "Koschade",
+                      "London Gang"                       = "london_gang",
+                      "Noordin Operations"                = "noordin_operational",
+                      "Operation Acero"                   = "acero",
+                      "Operation Jake"                    = "jake",
+                      "Operation Juanes"                  = "juanes",
+                      "Operation Mambo"                   = "mambo",
+                      "Siren"                             = "siren"
+                  ),
+                  width   = "100%"
+              )
+          )
+      }
+      else if (input$input_type == "external_data") {
+          column(
+              width = 12,
+              selectInput(
+                  inputId = "input_format",
+                  label   = tags$h4("Select an input format"),
+                  choices = list(
+                      "",
+                      "Edge list (*.csv)" = "el",
+                      "Pajek (*.net)"     = "pajek"
+                  ),
+                  width = "100%"
+              ),
+              tags$br(),
+              uiOutput("reactive_input_file")
+          )
+      }
+  })
+    
   ## Reactive UI for different import options (e.g., edgelist, matrix, etc.) ---
   output$reactive_input_file <- renderUI({
     validate(
@@ -14,25 +66,47 @@ shinyServer(function(input, output, session) {
       column(12,
              tags$b("DISCLAIMER:"), 
              tags$p("This import functionality expects an edge list in which the first two columns represent the actors to be connected, each row defines one edge."),
+             radioButtons(
+                 inputId = "input_directed_undirected",
+                 label   = tags$h4("Is this network directed or undirected?"),
+                 choices = list(
+                     "Directed",
+                     "Undirected"
+                 ),
+                 selected = "Directed",
+                 inline = TRUE
+             ),
+             tags$br(),
              fileInput(
                inputId     = "in_edges",
                label       = tags$h4("Import an edge list"),
                buttonLabel = "Browse",
                accept      = c(".csv") 
-             ),
-             tags$br(),
-             tags$style("<center>"),
-             radioButtons(
-               inputId = "input_directed_undirected",
-               label   = tags$h4("Is this network directed or undirected?"),
-               choices = list(
-                 "Directed",
-                 "Undirected"
-               ),
-               selected = "Directed",
-               inline = TRUE
              )
       )}
+      else if (input$input_format == "pajek") {
+          column(12,
+                 tags$b("DISCLAIMER:"), 
+                 tags$p("This import functionality expects a *.net or *.NET file."),
+                 radioButtons(
+                     inputId = "input_directed_undirected",
+                     label   = tags$h4("Is this network directed or undirected?"),
+                     choices = list(
+                         "Directed",
+                         "Undirected"
+                     ),
+                     selected = "Directed",
+                     inline = TRUE
+                 ),
+                 tags$br(),
+                 fileInput(
+                     inputId     = "in_edges",
+                     label       = tags$h4("Import an Pajek file"),
+                     buttonLabel = "Browse",
+                     accept      = c(".net", ".NET") 
+                 )
+          )
+      }
   })
   
   # Set up observers ===========================================================
@@ -76,7 +150,14 @@ shinyServer(function(input, output, session) {
   # network formats and return them as an edge list. This was kept as an 
   # independant function for flexibility, but it can be removed.
   get_edges_table <- eventReactive(FILES$file_to_import, {
-    read_csv(FILES$file_to_import, na = "")
+      if (file_ext(FILES$file_to_import) == "net" | file_ext(FILES$file_to_import) == "NET") {
+          get.data.frame(
+              read_graph(FILES$file_to_import, format = "pajek"),
+              what = "edges")
+      }
+      else {
+          read_csv(FILES$file_to_import, na = "")
+      }
   })
   
   # Get graph  =================================================================
@@ -100,7 +181,7 @@ shinyServer(function(input, output, session) {
                                                       mode = "all")$centralization,
         #* Calculate basic subgrouping metrics ------------------------------
         components = components(out, mode = "weak")$no,
-        cliques = length(igraph::cliques(out, min = 3)),
+        cliques = count_max_cliques(out, min = 3),
         kcore = max(coreness(out))
       )
     )

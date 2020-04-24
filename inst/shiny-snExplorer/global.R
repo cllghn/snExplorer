@@ -9,6 +9,7 @@ suppressPackageStartupMessages({
     library(shinyjs)
     library(rmarkdown)
     library(scales)
+    library(tools)
 })
 
 # Source files with additional functionalities =================================
