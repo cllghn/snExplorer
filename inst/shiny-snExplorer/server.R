@@ -190,7 +190,7 @@ shinyServer(function(input, output, session) {
       vertex_attr(out) %{}% NULL,
       list(
         #* Metrics -------------------------------------------------------------
-        total_degree = degree(out, mode = "total"),
+        total_degree = if (is_directed(out)) {degree(out, mode = "total")} else {sne_undirected_degree(out, weighted = FALSE)},
         in_degree = degree(out, mode = "in"),
         out_degree = degree(out, mode = "out"),
         betweenness = round(
@@ -203,6 +203,7 @@ shinyServer(function(input, output, session) {
           digits = 3
         ),
         constraint = round(1.125 - constraint(out), digits = 3),
+        ARD        = round(sne_harmonic_centrality(out), digits = 3),
         #* Other ---------------------------------------------------------------
         size = rep(25, length = vcount(out)),
         id = vertex_attr(out, "name") %||% seq_along(V(out))
@@ -313,6 +314,11 @@ shinyServer(function(input, output, session) {
           get_graph(),
           name = "constraint")
         )
+      if ("ARD" %in% input$node_sizing) return(
+            vertex_attr(
+                get_graph(),
+                name = "ARD")
+        )
     })
     
     nodes <- get.data.frame(get_graph(), "vertices")
@@ -336,7 +342,8 @@ shinyServer(function(input, output, session) {
                       "Total-degree" = "total_degree",
                       "Betweenness" = "betweenness",
                       "Eigenvector" = "eigenvector",
-                      "Inverse Constraint" = "constraint"
+                      "Inverse Constraint" = "constraint",
+                      "Average Reciprocal Distance" = "ARD"
                     )
         )
       )
@@ -350,7 +357,8 @@ shinyServer(function(input, output, session) {
                     "Total-degree" = "total_degree",
                     "Betweenness" = "betweenness",
                     "Eigenvector" = "eigenvector",
-                    "Inverse Constraint" = "constraint"
+                    "Inverse Constraint" = "constraint",
+                    "Average Reciprocal Distance" = "ARD"
                   )
       )
     )
@@ -435,6 +443,7 @@ shinyServer(function(input, output, session) {
         Betweenness    = vertex_attr(get_graph(), "betweenness"),
         Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
         `Inverse Constraint` = vertex_attr(get_graph(), "constraint"),
+        ARD           = vertex_attr(get_graph(), "ARD"),
         stringsAsFactors = FALSE
       ) %>%
         DT::datatable(rownames = FALSE,
@@ -460,6 +469,7 @@ shinyServer(function(input, output, session) {
       Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
       `Inverse Constraint` = vertex_attr(get_graph(),
                                                   "constraint"),
+      ARD            = vertex_attr(get_graph(), "ARD"),
                stringsAsFactors = FALSE
     ) %>%
       DT::datatable(rownames = FALSE,

@@ -1,9 +1,8 @@
 {
   "input": {
     "call_import_modal": 0,
-    "example_data": "",
     "graph_layout": "layout_with_fr",
-    "input_format": "",
+    "input_type": "",
     "report_name": "",
     "restart_app": 0,
     "sidebarCollapsed": true,
@@ -35,6 +34,14 @@
         "validation"
       ]
     },
+    "data_importation": {
+      "message": "Please select a valid staring point.",
+      "call": "NULL",
+      "type": [
+        "shiny.silent.error",
+        "validation"
+      ]
+    },
     "file_path": {
       "message": "",
       "call": "NULL",
@@ -45,14 +52,6 @@
     },
     "network_visualization": {
       "message": "",
-      "call": "NULL",
-      "type": [
-        "shiny.silent.error",
-        "validation"
-      ]
-    },
-    "reactive_input_file": {
-      "message": "Please select input format.",
       "call": "NULL",
       "type": [
         "shiny.silent.error",

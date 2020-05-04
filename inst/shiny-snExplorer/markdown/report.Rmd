@@ -187,6 +187,8 @@ if (params$gdir == TRUE) {
                                               "eigenvector"),
              `Inverse Constraint` = vertex_attr(params$graph,
                                                     "constraint"),
+             ARD            = vertex_attr(params$graph,
+                                          "ARD"),
              stringsAsFactors = FALSE
              ) %>%
     DT::datatable(rownames = FALSE,
@@ -216,6 +218,8 @@ data.frame(ID             = vertex_attr(params$graph,
                                         "eigenvector"),
            `Inverse Constraint` = vertex_attr(params$graph,
                                               "constraint"),
+           ARD            = vertex_attr(params$graph,
+                                          "ARD"),
            stringsAsFactors = FALSE
            ) %>%
   DT::datatable(rownames = FALSE,
