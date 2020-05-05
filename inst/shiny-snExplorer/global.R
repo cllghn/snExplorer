@@ -41,7 +41,7 @@ sne_harmonic_centrality <- function(g, normalized = TRUE) {
 }
 
 # Define a function for degree centrality with undirected data =================
-sne_undirected_degree <- function(g, weighted = FALSE) {
+sne_undirected_degree <- function(g, weighted = FALSE, loops = TRUE) {
     stopifnot(igraph::is_igraph(g)) 
     if (igraph::is_directed(g)) {
         stop("graph is directed")
@@ -58,6 +58,11 @@ sne_undirected_degree <- function(g, weighted = FALSE) {
                                  type   = "upper",
                                  names  = TRUE,
                                  sparse = FALSE)
+    
+    if (loops == FALSE) {
+        return(rowSums(`diag<-`(out, 0)) + colSums(`diag<-`(out, 0))) 
+    }
+    
     rowSums(out) + colSums(`diag<-`(out, 0))
 }
 

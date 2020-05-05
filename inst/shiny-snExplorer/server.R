@@ -190,7 +190,7 @@ shinyServer(function(input, output, session) {
       vertex_attr(out) %{}% NULL,
       list(
         #* Metrics -------------------------------------------------------------
-        total_degree = if (is_directed(out)) {degree(out, mode = "total")} else {sne_undirected_degree(out, weighted = FALSE)},
+        total_degree = if (is_directed(out)) {degree(out, mode = "total")} else {sne_undirected_degree(out, weighted = FALSE, loops = FALSE)},
         in_degree = degree(out, mode = "in"),
         out_degree = degree(out, mode = "out"),
         betweenness = round(
@@ -209,7 +209,6 @@ shinyServer(function(input, output, session) {
         id = vertex_attr(out, "name") %||% seq_along(V(out))
       )
     )
-    
     out
     
   })

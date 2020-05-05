@@ -5,8 +5,8 @@ account: cjcallag
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1880876
-bundleId: 3052992
+bundleId: 3103730
 url: https://cjcallag.shinyapps.io/shiny-snExplorer/
-when: 1587614484.05719
+when: 1588633959.53288
 asMultiple: FALSE
 asStatic: FALSE
