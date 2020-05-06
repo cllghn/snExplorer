@@ -202,7 +202,7 @@ shinyServer(function(input, output, session) {
           eigen_centrality(out, directed = is_directed(out), weights = NULL)$vector,
           digits = 3
         ),
-        constraint = round(1.125 - constraint(out), digits = 3),
+        constraint = round(sne_constraint(out), digits = 3),
         ARD        = round(sne_harmonic_centrality(out), digits = 3),
         #* Other ---------------------------------------------------------------
         size = rep(25, length = vcount(out)),

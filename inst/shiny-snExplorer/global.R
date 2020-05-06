@@ -40,6 +40,18 @@ sne_harmonic_centrality <- function(g, normalized = TRUE) {
     out 
 }
 
+# Define the inverse constraint function =======================================
+sne_constraint <- function(g, ...) {
+    stopifnot(is_igraph(g))
+    res <- constraint(g, ...)
+    sapply(res, function(x) {
+        if (x == 0) {
+            return(x)
+        }
+        1.125 - x
+    })
+}
+
 # Define a function for degree centrality with undirected data =================
 sne_undirected_degree <- function(g, weighted = FALSE, loops = TRUE) {
     stopifnot(igraph::is_igraph(g)) 
