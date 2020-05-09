@@ -207,8 +207,8 @@ if (params$gdir == TRUE) {
                     bFilter      = FALSE
                     )
     )
-  }
-data.frame(ID             = vertex_attr(params$graph,
+} else {
+      data.frame(ID             = vertex_attr(params$graph,
                                         "name"),
            `Total Degree` = vertex_attr(params$graph,
                                         "total_degree"),
@@ -238,5 +238,6 @@ data.frame(ID             = vertex_attr(params$graph,
                   bFilter      = FALSE
                   )
                 ) 
+  }
 ```
 

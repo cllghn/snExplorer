@@ -202,8 +202,10 @@ shinyServer(function(input, output, session) {
           eigen_centrality(out, directed = is_directed(out), weights = NULL)$vector,
           digits = 3
         ),
-        constraint = round(sne_constraint(out), digits = 3),
-        ARD        = round(sne_harmonic_centrality(out), digits = 3),
+        constraint  = round(sne_constraint(out), digits = 3),
+        ARD         = round(sne_harmonic_centrality(out), digits = 3),
+        # Hubs        = round(hub_score(out)$vector, digits = 3),
+        # Authorities = round(authority_score(out)$vector, digits = 3),
         #* Other ---------------------------------------------------------------
         size = rep(25, length = vcount(out)),
         id = vertex_attr(out, "name") %||% seq_along(V(out))
@@ -318,6 +320,16 @@ shinyServer(function(input, output, session) {
                 get_graph(),
                 name = "ARD")
         )
+       # if ("Hubs" %in% input$node_sizing) return(
+       #      vertex_attr(
+       #          get_graph(),
+       #          name = "Hubs")
+       #  )
+       #  if ("Authorities" %in% input$node_sizing) return(
+       #      vertex_attr(
+       #          get_graph(),
+       #          name = "Authorities")
+       #  )
     })
     
     nodes <- get.data.frame(get_graph(), "vertices")
@@ -342,25 +354,28 @@ shinyServer(function(input, output, session) {
                       "Betweenness" = "betweenness",
                       "Eigenvector" = "eigenvector",
                       "Inverse Constraint" = "constraint",
-                      "Average Reciprocal Distance" = "ARD"
+                      "Average Reciprocal Distance" = "ARD"#,
+                      # "Hubs" = "Hubs",
+                      # "Authorities" = "Authorities"
                     )
         )
       )
+    } else {
+        column(
+            width = 12,
+            selectInput(inputId = "node_sizing",
+                        label   = "Node Sizing Metrics",
+                        choices = list(
+                            "None" = "none",
+                            "Total-degree" = "total_degree",
+                            "Betweenness" = "betweenness",
+                            "Eigenvector" = "eigenvector",
+                            "Inverse Constraint" = "constraint",
+                            "Average Reciprocal Distance" = "ARD"
+                        )
+            )
+        )
     }
-    column(
-      width = 12,
-      selectInput(inputId = "node_sizing",
-                  label   = "Node Sizing Metrics",
-                  choices = list(
-                    "None" = "none",
-                    "Total-degree" = "total_degree",
-                    "Betweenness" = "betweenness",
-                    "Eigenvector" = "eigenvector",
-                    "Inverse Constraint" = "constraint",
-                    "Average Reciprocal Distance" = "ARD"
-                  )
-      )
-    )
   })
   
   # Generate network measures ==================================================
@@ -443,6 +458,8 @@ shinyServer(function(input, output, session) {
         Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
         `Inverse Constraint` = vertex_attr(get_graph(), "constraint"),
         ARD           = vertex_attr(get_graph(), "ARD"),
+        # Hubs           = vertex_attr(get_graph(), "Hubs"),
+        # Authorities    = vertex_attr(get_graph(), "Authorities"),
         stringsAsFactors = FALSE
       ) %>%
         DT::datatable(rownames = FALSE,
@@ -460,32 +477,34 @@ shinyServer(function(input, output, session) {
                         bPaginate    = TRUE,
                         bFilter      = FALSE
                         ))
+    } else{
+        data.frame(
+            ID = vertex_attr(get_graph(), "name"),
+            `Total Degree` = vertex_attr(get_graph(), "total_degree"),
+            Betweenness    = vertex_attr(get_graph(), "betweenness"),
+            Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
+            `Inverse Constraint` = vertex_attr(get_graph(),
+                                               "constraint"),
+            ARD            = vertex_attr(get_graph(), "ARD"),
+            stringsAsFactors = FALSE
+        ) %>%
+            DT::datatable(rownames = FALSE,
+                          escape   = FALSE,
+                          width    = "100%",
+                          options  = list(
+                              dom          = "tilfpr",
+                              scrollX      = TRUE,
+                              ordering     = TRUE,
+                              pageLength   = 10,
+                              autoWidth    = FALSE,
+                              lengthChange = FALSE,
+                              searching    = FALSE,
+                              bInfo        = TRUE,
+                              bPaginate    = TRUE,
+                              bFilter      = FALSE
+                          )) 
     }
-    data.frame(
-      ID = vertex_attr(get_graph(), "name"),
-      `Total Degree` = vertex_attr(get_graph(), "total_degree"),
-      Betweenness    = vertex_attr(get_graph(), "betweenness"),
-      Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
-      `Inverse Constraint` = vertex_attr(get_graph(),
-                                                  "constraint"),
-      ARD            = vertex_attr(get_graph(), "ARD"),
-               stringsAsFactors = FALSE
-    ) %>%
-      DT::datatable(rownames = FALSE,
-                    escape   = FALSE,
-                    width    = "100%",
-                    options  = list(
-                      dom          = "tilfpr",
-                      scrollX      = TRUE,
-                      ordering     = TRUE,
-                      pageLength   = 10,
-                      autoWidth    = FALSE,
-                      lengthChange = FALSE,
-                      searching    = FALSE,
-                      bInfo        = TRUE,
-                      bPaginate    = TRUE,
-                      bFilter      = FALSE
-                    )) 
+    
   })
   
   ## Generate report -----------------------------------------------------------
