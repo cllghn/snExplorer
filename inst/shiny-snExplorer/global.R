@@ -48,7 +48,7 @@ sne_constraint <- function(g, ...) {
         if (x == 0) {
             return(x)
         }
-        1.125 - x
+        1 - x
     })
 }
 
