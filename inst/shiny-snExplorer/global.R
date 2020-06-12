@@ -78,5 +78,3 @@ sne_undirected_degree <- function(g, weighted = FALSE, loops = TRUE) {
     
     rowSums(out) + colSums(`diag<-`(out, 0))
 }
-
-# TODO: Add metadata using the library(metathis) functions.
