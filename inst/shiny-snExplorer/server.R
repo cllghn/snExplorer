@@ -202,7 +202,8 @@ shinyServer(function(input, output, session) {
           eigen_centrality(out, directed = is_directed(out), weights = NULL)$vector,
           digits = 3
         ),
-        constraint  = round(sne_constraint(out), digits = 3),
+        rconstraint_ego  = round(sne_rconstraint(out, scope = "ego"), digits = 3),
+        rconstraint_extended  = round(sne_rconstraint(out, scope = "extended"), digits = 3),
         ARD         = round(sne_harmonic_centrality(out), digits = 3),
         # Hubs        = round(hub_score(out)$vector, digits = 3),
         # Authorities = round(authority_score(out)$vector, digits = 3),
@@ -310,11 +311,16 @@ shinyServer(function(input, output, session) {
           get_graph(),
           name = "eigenvector")
         )
-      if ("constraint" %in% input$node_sizing) return(
+      if ("rconstraint_ego" %in% input$node_sizing) return(
         vertex_attr(
           get_graph(),
-          name = "constraint")
+          name = "rconstraint_ego")
         )
+      if ("rconstraint_extended" %in% input$node_sizing) return(
+        vertex_attr(
+          get_graph(),
+          name = "rconstraint_extended")
+      )
       if ("ARD" %in% input$node_sizing) return(
             vertex_attr(
                 get_graph(),
@@ -353,7 +359,8 @@ shinyServer(function(input, output, session) {
                       "Total-degree" = "total_degree",
                       "Betweenness" = "betweenness",
                       "Eigenvector" = "eigenvector",
-                      "Inverse Constraint" = "constraint",
+                      "Reverse Constraint (Ego)" = "rconstraint_ego",
+                      "Reverse Constraint (Extended)" = "rconstraint_extended",
                       "Average Reciprocal Distance" = "ARD"#,
                       # "Hubs" = "Hubs",
                       # "Authorities" = "Authorities"
@@ -456,7 +463,7 @@ shinyServer(function(input, output, session) {
         `Total Degree` = vertex_attr(get_graph(), "total_degree"),
         Betweenness    = vertex_attr(get_graph(), "betweenness"),
         Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
-        `Inverse Constraint` = vertex_attr(get_graph(), "constraint"),
+        `Reverse Constraint` = vertex_attr(get_graph(), "rconstraint"),
         ARD           = vertex_attr(get_graph(), "ARD"),
         # Hubs           = vertex_attr(get_graph(), "Hubs"),
         # Authorities    = vertex_attr(get_graph(), "Authorities"),
@@ -483,8 +490,8 @@ shinyServer(function(input, output, session) {
             `Total Degree` = vertex_attr(get_graph(), "total_degree"),
             Betweenness    = vertex_attr(get_graph(), "betweenness"),
             Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
-            `Inverse Constraint` = vertex_attr(get_graph(),
-                                               "constraint"),
+            `Reverse Constraint` = vertex_attr(get_graph(),
+                                               "rconstraint"),
             ARD            = vertex_attr(get_graph(), "ARD"),
             stringsAsFactors = FALSE
         ) %>%
