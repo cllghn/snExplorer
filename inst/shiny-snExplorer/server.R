@@ -151,12 +151,17 @@ shinyServer(function(input, output, session) {
   # independant function for flexibility, but it can be removed.
   get_edges_table <- eventReactive(FILES$file_to_import, {
       if (file_ext(FILES$file_to_import) == "net" | file_ext(FILES$file_to_import) == "NET") {
-          get.data.frame(
+          out <- get.data.frame(
               read_graph(FILES$file_to_import, format = "pajek"),
               what = "edges")
+          return(out)
       }
       else {
-          read_csv(FILES$file_to_import, na = "")
+          out <- read_csv(FILES$file_to_import, na = "")
+          if (!is.null(out[["weight"]])) {
+              names(out)[names(out) == "weight"] <- "WEIGHT"
+          }
+          return(out)
       }
   })
   
@@ -167,11 +172,10 @@ shinyServer(function(input, output, session) {
     
     out <- graph_from_data_frame(d = get_edges_table(), 
                                  directed = FILES$directed)
-
-    # Set network level attributes -----------------------------------------
+    # Set network level attributes ---------------------------------------------
     graph_attr(out) <- c(
       graph_attr(out) %{}% NULL,
-      #* Calculate topological metrics -------------------------------------
+      #* Calculate topological metrics -----------------------------------------
       list(
         density = edge_density(out),
         clustering = transitivity(out, type = "average"),
@@ -179,13 +183,13 @@ shinyServer(function(input, output, session) {
         edges = ecount(out),
         degree_centralization = centralization.degree(out,
                                                       mode = "all")$centralization,
-        #* Calculate basic subgrouping metrics ------------------------------
+        #* Calculate basic subgrouping metrics ---------------------------------
         components = components(out, mode = "weak")$no,
         cliques = count_max_cliques(out, min = 3),
         kcore = max(coreness(out))
       )
     )
-    # Set vertex attributes --------------------------------------------------
+    # Set vertex attributes ----------------------------------------------------
     vertex_attr(out) <- c(
       vertex_attr(out) %{}% NULL,
       list(
