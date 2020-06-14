@@ -31,8 +31,7 @@ Imports:
     igraph,
     shinyjs,
     rmarkdown,
-    scales,
-    V8
+    scales
 Suggests:
     knitr,
     shinytest,

@@ -1,6 +1,5 @@
 # Load up all required packages ================================================
 suppressPackageStartupMessages({
-    library(V8)
     library(shiny)
     library(shinydashboard)
     library(visNetwork)
