@@ -381,7 +381,8 @@ shinyServer(function(input, output, session) {
                             "Total-degree" = "total_degree",
                             "Betweenness" = "betweenness",
                             "Eigenvector" = "eigenvector",
-                            "Inverse Constraint" = "constraint",
+                            "Reverse Constraint (Ego)" = "rconstraint_ego",
+                            "Reverse Constraint (Extended)" = "rconstraint_extended",
                             "Average Reciprocal Distance" = "ARD"
                         )
             )
@@ -467,7 +468,10 @@ shinyServer(function(input, output, session) {
         `Total Degree` = vertex_attr(get_graph(), "total_degree"),
         Betweenness    = vertex_attr(get_graph(), "betweenness"),
         Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
-        `Reverse Constraint` = vertex_attr(get_graph(), "rconstraint"),
+        `Reverse Constraint Ego` = vertex_attr(get_graph(),
+                                               "rconstraint_ego"),
+        `Reverse Constraint Extended` = vertex_attr(get_graph(),
+                                                    "rconstraint_extended"),
         ARD           = vertex_attr(get_graph(), "ARD"),
         # Hubs           = vertex_attr(get_graph(), "Hubs"),
         # Authorities    = vertex_attr(get_graph(), "Authorities"),
@@ -494,8 +498,10 @@ shinyServer(function(input, output, session) {
             `Total Degree` = vertex_attr(get_graph(), "total_degree"),
             Betweenness    = vertex_attr(get_graph(), "betweenness"),
             Eigenvector    = vertex_attr(get_graph(), "eigenvector"),
-            `Reverse Constraint` = vertex_attr(get_graph(),
-                                               "rconstraint"),
+            `Reverse Constraint Ego` = vertex_attr(get_graph(),
+                                               "rconstraint_ego"),
+            `Reverse Constraint Extended` = vertex_attr(get_graph(),
+                                                   "rconstraint_extended"),
             ARD            = vertex_attr(get_graph(), "ARD"),
             stringsAsFactors = FALSE
         ) %>%

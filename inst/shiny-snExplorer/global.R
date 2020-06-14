@@ -41,7 +41,6 @@ sne_harmonic_centrality <- function(g, normalized = TRUE) {
 }
 
 # Define the inverse constraint function =======================================
-<<<<<<< HEAD
 .rconstraint <- function(g, nodes = igraph::V(g)) {
   res <- 1.125 - igraph::constraint(g, nodes = nodes)
   res[is.na(res) | res < 0] <- 0
