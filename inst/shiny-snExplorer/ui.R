@@ -1,35 +1,42 @@
 
 # dashboardHeader ==============================================================
 header <- dashboardHeader(
-  title      = "snExplorer",
+  title = "snExplorer",
   titleWidth = 200
 )
 
 # dashboardSidebar =============================================================
 sidebar <- dashboardSidebar(
   collapsed = TRUE,
-  width     = 200,
+  width = 200,
   sidebarMenu(
     id = "tabs",
-    menuItem(text    = "Network Explorer",
-             tabName = "explorer",
-             icon    = icon("bezier-curve")),
-    menuItem(text    = "Network Measures",
-             tabName = "measures",
-             icon    = icon("chart-line")),
+    menuItem(
+      text = "Network Explorer",
+      tabName = "explorer",
+      icon = icon("bezier-curve")
+    ),
+    menuItem(
+      text = "Network Measures",
+      tabName = "measures",
+      icon = icon("chart-line")
+    ),
     # menuItem(text    = "Geospatial Explorer",
     #          tabName = "map",
     #          icon    = icon("globe")),
-    menuItem(text    = "About",
-             tabName = "about",
-             icon    = icon("info-circle")),
+    menuItem(
+      text = "About",
+      tabName = "about",
+      icon = icon("info-circle")
+    ),
     tags$br(),
     # Buttons:
     column(
       12,
-      align  = "center",
-      actionButton(inputId = "call_import_modal",
-                   label   = "Import Data"
+      align = "center",
+      actionButton(
+        inputId = "call_import_modal",
+        label = "Import Data"
       ),
       # actionButton(inputId = "call_export_modal",
       #              label   = "Export Data"
@@ -37,8 +44,9 @@ sidebar <- dashboardSidebar(
       # Call shinyjs
       useShinyjs(),
       extendShinyjs(text = jsResetCode),
-      actionButton(inputId = "restart_app",
-                   label   = "Restart App"
+      actionButton(
+        inputId = "restart_app",
+        label = "Restart App"
       )
     )
   )
@@ -51,13 +59,13 @@ tab_explorer <- tabItem(
   tabName = "explorer",
   fluidRow(
     box(
-      title       = "Context",
-      width       = 12,
+      title = "Context",
+      width = 12,
       collapsible = FALSE,
       column(
         width = 12,
         tags$h4(textOutput("file_path"))
-        ),
+      ),
       tags$br(),
       fluidRow(
         infoBoxOutput("context_box_graph"),
@@ -68,33 +76,37 @@ tab_explorer <- tabItem(
   ),
   fluidRow(
     box(
-      title       = "Network Visualization",
-      width       = 12,
+      title = "Network Visualization",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = FALSE,
-      visNetworkOutput(outputId = "network_visualization",
-                       width    = "100%",
-                       height   = "400px")
+      collapsed = FALSE,
+      visNetworkOutput(
+        outputId = "network_visualization",
+        width = "100%",
+        height = "400px"
+      )
     )
   ),
   fluidRow(
     box(
-      title       = "Modify Graph",
-      width       = 12,
+      title = "Modify Graph",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = TRUE,
+      collapsed = TRUE,
       fluidRow(
         column(
           width = 12,
-          selectInput(inputId = "graph_layout",
-                      label   = "Layout Algorithm",
-                      choices = list(
-                        "Fruchterman-Reingold" = "layout_with_fr",
-                        "Kamada-Kawai"         = "layout_with_kk",
-                        "Circle"               = "layout_in_circle",
-                        "Nicely"               = "layout_nicely",
-                        "MD"                   = "layout_with_mds"),
-                      selected = "layout_with_fr"
+          selectInput(
+            inputId = "graph_layout",
+            label = "Layout Algorithm",
+            choices = list(
+              "Fruchterman-Reingold" = "layout_with_fr",
+              "Kamada-Kawai"         = "layout_with_kk",
+              "Circle"               = "layout_in_circle",
+              "Nicely"               = "layout_nicely",
+              "MD"                   = "layout_with_mds"
+            ),
+            selected = "layout_with_fr"
           )
         ),
         uiOutput("modify_ui")
@@ -109,10 +121,10 @@ tab_measures <- tabItem(
   fluidRow(
     # Network level metrics box ------------------------------------------------
     box(
-      title       = "Network Level Metrics",
-      width       = 12,
+      title = "Network Level Metrics",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = TRUE,
+      collapsed = TRUE,
       column(
         width = 12,
         tags$p("Network-level measures are calculated on the whole network and provide indicators of network structure."),
@@ -126,10 +138,10 @@ tab_measures <- tabItem(
     ),
     # Group level metrics box --------------------------------------------------
     box(
-      title       = "Group Level Metrics",
-      width       = 12,
+      title = "Group Level Metrics",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = TRUE,
+      collapsed = TRUE,
       column(
         width = 12,
         tags$p("Subgrouping metrics leverage regularities in the network's structure to identify cohesive subcommunties."),
@@ -140,10 +152,10 @@ tab_measures <- tabItem(
     ),
     # Vertex level metrics box -------------------------------------------------
     box(
-      title       = "Vertex Level Metrics",
-      width       = 12,
+      title = "Vertex Level Metrics",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = TRUE,
+      collapsed = TRUE,
       column(
         width = 12,
         tags$p("The metrics below are designed to determine which nodes occupy the center of a network."),
@@ -154,10 +166,10 @@ tab_measures <- tabItem(
     ),
     # Report box ---------------------------------------------------------------
     box(
-      title       = "Report",
-      width       = 12,
+      title = "Report",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = TRUE,
+      collapsed = TRUE,
       column(
         width = 4,
         tags$p(
@@ -165,7 +177,7 @@ tab_measures <- tabItem(
         ),
         tags$p(
           tags$small("First, provide a name for name for export. Then, download the file.")
-          )
+        )
       ),
       column(
         width = 8,
@@ -173,18 +185,20 @@ tab_measures <- tabItem(
           textInput(
             inputId = "report_name",
             label = "Report identifier:",
-            value="",
-            placeholder = "Identifier without extension...")
-          ),
+            value = "",
+            placeholder = "Identifier without extension..."
+          )
+        ),
         column(
           width = 12,
-          align= "center",
+          align = "center",
           fluidRow(
             downloadButton("download_report",
-                           label="Download Report")
-                    )
+              label = "Download Report"
+            )
           )
         )
+      )
     )
   )
 )
@@ -194,16 +208,16 @@ tab_map <- tabItem(
   tabName = "map",
   fluidRow(
     box(
-      title       = "Set Up",
-      width       = 12,
+      title = "Set Up",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = TRUE
+      collapsed = TRUE
     ),
     box(
-      title       = "Map",
-      width       = 12,
+      title = "Map",
+      width = 12,
       collapsible = TRUE,
-      collapsed   = TRUE
+      collapsed = TRUE
     )
   )
 )
@@ -218,7 +232,7 @@ tab_about <- tabItem(
     )
   )
 )
-  
+
 ## body
 body <- dashboardBody(
   tabItems(

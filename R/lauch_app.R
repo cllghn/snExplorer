@@ -5,21 +5,22 @@
 #'
 #' @importFrom shiny runApp
 #'
-#' @examples 
+#' @examples
 #' \dontrun{
-#' 
-#' 
+#'
+#'
 #' launch_shiny_app()
-#' 
-#' 
 #' }
 #'
 #' @export
 launch_shiny_app <- function(app = "shiny-snExplorer",
                              use_browser = TRUE) {
   dir <- system.file(app,
-                     package = "snExplorer")
-  
-  runApp(appDir = dir,
-         launch.browser = use_browser)
+    package = "snExplorer"
+  )
+
+  runApp(
+    appDir = dir,
+    launch.browser = use_browser
+  )
 }
