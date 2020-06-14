@@ -7,13 +7,13 @@ modal_export_data <- function() {
         tags$style("<center>"),
         selectInput(
           inputId = "export_data",
-          label   = tags$h4("Data export format:"),
+          label = tags$h4("Data export format:"),
           choices = list(
             "",
             "edgelist",
             "matrix"
           ),
-          width   = "100%" 
+          width = "100%"
         )
       )
     )
