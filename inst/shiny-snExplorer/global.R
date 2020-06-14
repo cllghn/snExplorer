@@ -41,16 +41,32 @@ sne_harmonic_centrality <- function(g, normalized = TRUE) {
 }
 
 # Define the inverse constraint function =======================================
-sne_constraint <- function(g, ...) {
-    stopifnot(is_igraph(g))
-    res <- constraint(g, ...)
-    vapply(res, function(x) {
-        if (x == 0) {
-            return(x)
-        }
-        1 - x
-    },
-    FUN.VALUE = numeric(1L))
+<<<<<<< HEAD
+.rconstraint <- function(g, nodes = igraph::V(g)) {
+  res <- 1.125 - igraph::constraint(g, nodes = nodes)
+  res[is.na(res) | res < 0] <- 0
+  res
+}
+
+sne_rconstraint <- function(g, scope = c("extended", "ego"), ...) {
+  stopifnot(igraph::is_igraph(g))
+  
+  scope <- match.arg(scope, c("extended", "ego"))
+  if (scope == "extended") {
+    return(.rconstraint(g))
+  }
+  
+  had_names <- igraph::is_named(g)
+  if (!had_names) {
+    igraph::vertex_attr(g, "name") <- sprintf("n%d", seq_len(igraph::vcount(g)))
+  }
+  
+  ego_nets <- igraph::make_ego_graph(g) # get all ego nets as list
+  names(ego_nets) <- igraph::vertex_attr(g, "name") # put egos' names on each element
+  # do what's essentially purrr::iwalk()
+  out <- mapply(.rconstraint, ego_nets, names(ego_nets), USE.NAMES = FALSE)
+  
+  if (had_names) out else unname(out)
 }
 
 # Define a function for degree centrality with undirected data =================

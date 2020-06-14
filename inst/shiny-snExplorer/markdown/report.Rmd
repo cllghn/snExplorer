@@ -173,24 +173,18 @@ data.frame(Measure = c("Weak Components",
 
 ```{r, echo = FALSE}
 if (params$gdir == TRUE) {
-  data.frame(ID             = vertex_attr(params$graph,
-                                          "name"),
-             `In Degree`    = vertex_attr(params$graph,
-                                           "in_degree"),
-             `Out Degree`   = vertex_attr(params$graph,
-                                          "out_degree"),
-             `Total Degree` = vertex_attr(params$graph,
-                                           "total_degree"),
-             Betweenness    = vertex_attr(params$graph,
-                                              "betweenness"),
-             Eigenvector    = vertex_attr(params$graph,
-                                              "eigenvector"),
-             `Inverse Constraint` = vertex_attr(params$graph,
-                                                    "constraint"),
-             ARD            = vertex_attr(params$graph,
-                                          "ARD"),
-             stringsAsFactors = FALSE
-             ) %>%
+  data.frame(
+    ID                   = vertex_attr(params$graph, "name"),
+    `In Degree`          = vertex_attr(params$graph, "in_degree"),
+    `Out Degree`         = vertex_attr(params$graph, "out_degree"),
+    `Total Degree`       = vertex_attr(params$graph, "total_degree"),
+    Betweenness          = vertex_attr(params$graph, "betweenness"),
+    Eigenvector          = vertex_attr(params$graph, "eigenvector"),
+    `Reverse Constraint (Ego)` = vertex_attr(params$graph, "rconstraint_ego"),
+    `Reverse Constraint (Extended)` = vertex_attr(params$graph, "rconstraint_extended"),
+    ARD                  = vertex_attr(params$graph, "ARD"),
+    stringsAsFactors = FALSE
+    ) %>%
     DT::datatable(rownames = FALSE,
                   escape   = FALSE,
                   width    = "100%",
@@ -208,20 +202,16 @@ if (params$gdir == TRUE) {
                     )
     )
 } else {
-      data.frame(ID             = vertex_attr(params$graph,
-                                        "name"),
-           `Total Degree` = vertex_attr(params$graph,
-                                        "total_degree"),
-           Betweenness    = vertex_attr(params$graph,
-                                        "betweenness"),
-           Eigenvector    = vertex_attr(params$graph,
-                                        "eigenvector"),
-           `Inverse Constraint` = vertex_attr(params$graph,
-                                              "constraint"),
-           ARD            = vertex_attr(params$graph,
-                                          "ARD"),
-           stringsAsFactors = FALSE
-           ) %>%
+      data.frame(
+        ID                   = vertex_attr(params$graph, "name"),
+        `Total Degree`       = vertex_attr(params$graph,"total_degree"),
+        Betweenness          = vertex_attr(params$graph,"betweenness"),
+        Eigenvector          = vertex_attr(params$graph, "eigenvector"),
+        `Reverse Constraint (Ego)` = vertex_attr(params$graph, "rconstraint_ego"),
+        `Reverse Constraint (Extended)` = vertex_attr(params$graph, "rconstraint_extended"),
+        ARD                  = vertex_attr(params$graph, "ARD"),
+        stringsAsFactors = FALSE
+      ) %>%
   DT::datatable(rownames = FALSE,
                 escape   = FALSE,
                 width    = "100%",
