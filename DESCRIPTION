@@ -24,14 +24,15 @@ LazyData: true
 RoxygenNote: 7.1.0
 Roxygen: list(markdown = TRUE)
 Imports:
+    curl,
+    igraph,
+    readr,
+    rmarkdown,
     shiny,
     shinydashboard,
-    visNetwork,
-    readr,
-    igraph,
     shinyjs,
-    rmarkdown,
-    scales
+    scales,
+    visNetwork
 Suggests:
     knitr,
     shinytest,
