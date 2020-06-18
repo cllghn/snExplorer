@@ -1,7 +1,7 @@
+library(shinytest)
+library(testthat)
 context("app-file")
 # This file is for testing the applications in the inst/ directory.
-
-library(shinytest)
 
 test_that("snExplorer works", {
     skip_on_cran()
@@ -9,4 +9,5 @@ test_that("snExplorer works", {
     
     app_dir <- system.file(package = "snExplorer", "shiny-snExplorer")
     expect_pass(testApp(app_dir, compareImages = FALSE))
+    
 })

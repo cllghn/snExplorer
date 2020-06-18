@@ -21,7 +21,7 @@ jsResetCode <- "shinyjs.reset = function() {history.go(0)}"
 `%||%` <- function(lhs, rhs) if (is.null(lhs)) rhs else lhs
 `%{}%` <- function(lhs, rhs) if (length(lhs)) lhs else rhs
 
-# Define the normalized harmonic centrality funtion ============================
+# Define the normalized harmonic centrality function ===========================
 sne_harmonic_centrality <- function(g, normalized = TRUE) {
     # Test input is igraph
     stopifnot(igraph::is_igraph(g))  
