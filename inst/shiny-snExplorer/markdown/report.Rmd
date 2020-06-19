@@ -172,7 +172,7 @@ data.frame(Measure = c("Weak Components",
 ## Vertex Level Metrics
 
 ```{r, echo = FALSE}
-if (params$gdir == TRUE) {
+if (params$gdir) {
   data.frame(
     ID                   = vertex_attr(params$graph, "name"),
     `In Degree`          = vertex_attr(params$graph, "in_degree"),

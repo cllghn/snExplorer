@@ -8,9 +8,9 @@
     "network_visualization_selected": "",
     "report_name": "",
     "restart_app": 0,
-    "sidebarCollapsed": true,
+    "sidebarCollapsed": false,
     "sidebarItemExpanded": null,
-    "tabs": "explorer"
+    "tabs": "about"
   },
   "output": {
     "context_box_edges": {

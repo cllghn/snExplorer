@@ -6,6 +6,20 @@ relational data. The code is mainatined by the [CORE
 Lab](https://my.nps.edu/web/core) and hosted on
 [Github](https://github.com/NPSCORELAB).
 
+## Citation
+
+Callaghan C, Knapp B (2020). snExplorer: A parsimonious Shiny application for interactive visualization and analysis of networks.. R package version 0.0.0.9000, https://github.com/cjcallag/snExplorer.
+
+```
+@Manual{snExplorer-package,
+    title = {snExplorer: A parsimonious Shiny application for interactive visualization and analysis of networks.},
+    author = {Christopher Callaghan and Brendan Knapp},
+    year = {2020},
+    note = {R package version 0.0.0.9000},
+    url = {https://github.com/cjcallag/snExplorer},
+}
+```
+
 <br>
 
 <center>
