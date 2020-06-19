@@ -10,8 +10,6 @@
 
 [![R build
 status](https://github.com/cjcallag/snExplorer/workflows/R-CMD-check/badge.svg)](https://github.com/cjcallag/snExplorer/actions?workflow=R-CMD-check)
-[![AppVeyor build
-status](https://ci.appveyor.com/api/projects/status/github/cjcallag/snExplorer?branch=master&svg=true)](https://ci.appveyor.com/project/cjcallag/snExplorer)
 [![Travis-CI Build
 Status](https://travis-ci.org/cjcallag/snExplorer.svg?branch=master)](https://travis-ci.org/cjcallag/snExplorer)
 [![Depends](https://img.shields.io/badge/Depends-GNU_R%3E=3.5-blue.svg)](https://www.r-project.org/)
