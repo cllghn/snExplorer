@@ -165,7 +165,7 @@ shinyServer(function(input, output, session) {
       return(out)
     }
     else {
-      out <- read_csv(FILES$file_to_import, na = "")
+      out <- read.csv(FILES$file_to_import, na = "")
       if (!is.null(out[["weight"]])) {
         names(out)[names(out) == "weight"] <- "WEIGHT"
       }

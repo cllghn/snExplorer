@@ -3,9 +3,9 @@ suppressPackageStartupMessages({
   library(shiny)
   library(shinydashboard)
   library(visNetwork)
-  library(readr)
+  # library(readr)
   library(igraph)
-  library(shinyjs)
+  # library(shinyjs)
   library(rmarkdown)
   library(scales)
   library(tools)
@@ -16,7 +16,7 @@ source("import_modal.R")
 # source("export_modal.R")
 
 # Define the js method that resets the page ====================================
-jsResetCode <- "shinyjs.reset = function() {history.go(0)}"
+# jsResetCode <- "shinyjs.reset = function() {history.go(0)}"
 
 `%||%` <- function(lhs, rhs) if (is.null(lhs)) rhs else lhs
 `%{}%` <- function(lhs, rhs) if (length(lhs)) lhs else rhs

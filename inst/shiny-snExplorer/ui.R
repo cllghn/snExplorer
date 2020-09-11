@@ -37,17 +37,17 @@ sidebar <- dashboardSidebar(
       actionButton(
         inputId = "call_import_modal",
         label = "Import Data"
-      ),
+      )#,
       # actionButton(inputId = "call_export_modal",
       #              label   = "Export Data"
       # ),
       # Call shinyjs
-      useShinyjs(),
-      extendShinyjs(text = jsResetCode),
-      actionButton(
-        inputId = "restart_app",
-        label = "Restart App"
-      )
+      # useShinyjs(),
+      # extendShinyjs(text = jsResetCode),
+      # actionButton(
+      #   inputId = "restart_app",
+      #   label = "Restart App"
+      # )
     )
   )
 )
