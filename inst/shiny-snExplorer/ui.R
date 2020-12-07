@@ -43,7 +43,7 @@ sidebar <- dashboardSidebar(
       # ),
       # Call shinyjs
       useShinyjs(),
-      extendShinyjs(text = jsResetCode),
+      extendShinyjs(text = jsResetCode, functions = "shinyjs.reset"),
       actionButton(
         inputId = "restart_app",
         label = "Restart App"
