@@ -19,8 +19,6 @@ Application Launcher
 
 
 launch_shiny_app()
-
-
 }
 
 }
