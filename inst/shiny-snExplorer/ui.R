@@ -24,11 +24,11 @@ sidebar <- dashboardSidebar(
     # menuItem(text    = "Geospatial Explorer",
     #          tabName = "map",
     #          icon    = icon("globe")),
-    menuItem(
-      text = "About",
-      tabName = "about",
-      icon = icon("info-circle")
-    ),
+    # menuItem(
+    #   text = "About",
+    #   tabName = "about",
+    #   icon = icon("info-circle")
+    # ),
     tags$br(),
     # Buttons:
     column(
@@ -223,23 +223,24 @@ tab_map <- tabItem(
 )
 
 ## about =======================================================================
-tab_about <- tabItem(
-  tabName = "about",
-  fluidRow(
-    box(
-      width = 12,
-      includeMarkdown("markdown/about.md")
-    )
-  )
-)
+# tab_about <- tabItem(
+#   tabName = "about",
+#   fluidRow(
+#     box(
+#       width = 12,
+#       
+#       includeMarkdown("markdown/about.md")
+#     )
+#   )
+# )
 
 ## body
 body <- dashboardBody(
   tabItems(
     tab_explorer,
     tab_measures,
-    tab_map,
-    tab_about
+    tab_map # ,
+    # tab_about
   )
 )
 

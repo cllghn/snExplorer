@@ -4,9 +4,8 @@ username:
 account: cjcallag
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
-appId: 1880876
-bundleId: 3103730
+appId: 7906795
+bundleId: 6645967
 url: https://cjcallag.shinyapps.io/shiny-snExplorer/
-when: 1588633959.53288
-asMultiple: FALSE
-asStatic: FALSE
+when: 1671223170.73059
+lastSyncTime: 1671223170.73059

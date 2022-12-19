@@ -187,12 +187,15 @@ shinyServer(function(input, output, session) {
       #* Calculate topological metrics -----------------------------------------
       list(
         density = edge_density(out),
-        clustering = transitivity(out, type = "average"),
+        clustering = transitivity(out, type = "average", isolates = "zero"),
+        ws_clustering = transitivity(out, type = "average", isolates = "NaN"),
         size = vcount(out),
         edges = ecount(out),
-        degree_centralization = centralization.degree(out,
-          mode = "all"
-        )$centralization,
+        degree_centralization = centr_degree(simplify(out,
+                                                      remove.multiple = TRUE,
+                                                      remove.loops = FALSE),
+                                             mode = "all", loops = FALSE
+                                             )$centralization,
         #* Calculate basic subgrouping metrics ---------------------------------
         components = components(out, mode = "weak")$no,
         cliques = count_max_cliques(out, min = 3),
@@ -376,7 +379,8 @@ shinyServer(function(input, output, session) {
     data.frame(
       Variable = c(
         "Density",
-        "Local Clustering Coefficient",
+        "Alternative Local Clustering Coefficient",
+        "Watt-Strogatz Clustering Coefficient",
         "Size",
         "Number of Edges",
         "Degree Centralization"
@@ -384,13 +388,15 @@ shinyServer(function(input, output, session) {
       Score = c(
         round(graph_attr(get_graph(), name = "density"), digits = 3),
         round(graph_attr(get_graph(), name = "clustering"), digits = 3),
+        round(graph_attr(get_graph(), name = "ws_clustering"), digits = 3),
         graph_attr(get_graph(), name = "size"),
         graph_attr(get_graph(), name = "edges"),
         round(graph_attr(get_graph(), name = "degree_centralization"), digits = 3)
       ),
       Explanation = c(
         "Density is formally defined as the total number of observed ties in a network divided by the number of possible ties.",
-        "The sum of each actor's clustering coefficient divided by the number of actors within the network.",
+        "The sum of each actor's clustering coefficient divided by the number of actors within the network. Isolates and pendents are threated as zero.",
+        "The sum of each actor's clustering coefficient divided by the number of actors within the network. Isolates and pendents are threated as 'NaN'.",
         "A count of the number of actors in a network.",
         "The number of edges in the network.",
         "The standard measure of centralization uses the variation in actor degree centrality within the network to measure the level of centralization. More variation yields higher network centralization scores, while less variation yields lower scores. Formally, it is the ratio of the actual sum of differences in actor centrality over the theoretical maximum, yielding a score somewhere between 0.0 and 1.0."
@@ -405,7 +411,7 @@ shinyServer(function(input, output, session) {
           dom = "ti",
           scrollX = TRUE,
           ordering = FALSE,
-          pageLength = 5,
+          pageLength = 6,
           autoWidth = FALSE,
           lengthChange = FALSE,
           searching = FALSE,
